@@ -46,14 +46,14 @@ TEST(TPostfix, check_postfix3)
 
 TEST(TPostfix, check_postfix4)
 {
-	TPostfix p("(l * ( p - ( a + b ) * c - d ) + h ) * s - n");
+	TPostfix p("(l*(p-(a+b)*c-d)+h)*s-n");
 	p.ToPostfix();
 	EXPECT_EQ("lpab+c*-d-*h+s*n-", p.GetPostfix());
 }
 
 TEST(TPostfix, check_calculate1)
 {
-	TPostfix p("(l * ( p - ( a + b ) * c - d ) + h ) * s - n");
+	TPostfix p("(l*(p-(a+b)*c-d)+h)*s-n");
 	p.ToPostfix();
 	double* values;
 	int CountVal = p.CountNum();

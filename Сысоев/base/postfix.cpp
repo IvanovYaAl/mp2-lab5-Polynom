@@ -17,7 +17,7 @@ bool TPostfix::Operation(char op) {
 
 bool TPostfix::Check() {
 	int num = 0, operat = 0;
-	for (int i = 0; i < infix.size(); i++) {
+	for (size_t i = 0; i < infix.size(); i++) {
 		if (infix[i] == '+' || infix[i] == '-' || infix[i] == '/' || infix[i] == '*')
 			operat++;
 		else if (!Operation(infix[i]) && infix[i] != ')' && infix[i] != '(')
@@ -35,7 +35,7 @@ bool TPostfix::Check() {
 	if (num != operat + 1)
 		return false;
 	int LBracket = 0, RBracket = 0;
-	for (int i = 0; i < infix.size(); i++) {
+	for (size_t i = 0; i < infix.size(); i++) {
 		if (infix[i] == '(')
 			LBracket++;
 		else if (infix[i] == ')')
@@ -73,7 +73,7 @@ string TPostfix::ToPostfix()
 	}
 	TStack<char> ops(infix.size());
 	postfix = "";
-	for (int i = 0; i < infix.size(); i++)
+	for (size_t i = 0; i < infix.size(); i++)
 	{
 		if (isalpha(infix[i])) postfix += infix[i];
 		else if (Operation(infix[i]) || (infix[i] == '(') || (infix[i] == ')')) {
@@ -88,7 +88,6 @@ string TPostfix::ToPostfix()
 			while (ops.GetTop() != '(')
 			{
 				postfix += ops.pop();
-
 			}
 			ops.pop();
 		}
@@ -118,18 +117,75 @@ string TPostfix::ToPostfix()
 	return postfix;
 }
 
+string TPostfix::DelPostfix() {
 
+	string newpost = infix;
+	int newsize = newpost.size();
+	for (int i = 0; i < newsize; i++) {
+		if (newpost[i] == '+' || newpost[i] == '-' || newpost[i] == '*' || newpost[i] == '/' || newpost[i] == '(' || newpost[i] == ')') {
+			for (int j = i; j < newsize-1; j++) {
+				newpost[j] = newpost[j + 1];	
+			}
+			newsize--;
+			i--;
+		}
+		
+	}
+	string op="";
+	for (int i = 0; i < newsize; i++) {
+		op += newpost[i];
+	}
+	return op;
+}
+
+bool TPostfix::Eqution() {
+	string let = DelPostfix();
+	for (int i = 0; i < DelPostfix().size(); i++) {
+		for (int j = i + 1; j < let.size(); j++) {
+			if (let[i] == let[j])
+				return false;
+		}
+	}
+	return true;
+}
 
 double TPostfix::Calculate(double* _val )
 {
 	TStack<double>stack(postfix.size());
 	double num1, num2;
+	
+	cout << DelPostfix() << endl;
+	string letter = DelPostfix();
+	int hp = DelPostfix().size();
+	double* newval;
+	newval = new double[hp]();
+
+	if (Eqution()) {
+		for (int i = 0; i < hp; i++) {
+			newval[i] = _val[i];
+		}
+	}
+	else {
+		int u = 0;
+		for (int i = 0; i < hp-1; i++) {
+			for (int j = i + 1; j < hp; j++) {
+				if ((letter[i] == letter[j]) && letter[i] != ' ') {
+					if (u == 0)
+						newval[i] = _val[i];
+					newval[j] = newval[i];
+					letter[j] = ' ';
+					u = 1;
+				}
+				u = 0;
+			}
+		}
+	}
 	int j = 0;
-	for (int i = 0; i < postfix.size(); i++) {
+	for (size_t i = 0; i < postfix.size(); i++) {
 		
 		if (isalpha(postfix[i]))
 		{
-			stack.Push(_val[j]);
+			stack.Push(newval[j]);
 			j++;
 		}
 		else {
