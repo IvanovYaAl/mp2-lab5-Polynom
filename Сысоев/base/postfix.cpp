@@ -2,8 +2,13 @@
 #include "stack.h"
 
 TPostfix::TPostfix() {
-	infix = "))a+b+c+d-g((";
+	infix = "a+b";
 }
+
+TPostfix::TPostfix(string str) {
+	infix = str;
+}
+
 bool TPostfix::Operation(char op) {
 	if ((op == '+') || (op == '-') || (op == '*') || (op == '/'))
 		return true;
@@ -63,8 +68,9 @@ int TPostfix::Priority(char a, char b) {
 
 string TPostfix::ToPostfix()
 {
-	if (Check()==false)
-		throw "Error";
+	if (Check() == false) {
+		throw "Error";	
+	}
 	TStack<char> ops(infix.size());
 	postfix = "";
 	for (int i = 0; i < infix.size(); i++)
@@ -113,9 +119,7 @@ string TPostfix::ToPostfix()
 }
 
 
-TPostfix::TPostfix(string str) {
-	infix = str;
-}
+
 double TPostfix::Calculate(double* _val )
 {
 	TStack<double>stack(postfix.size());

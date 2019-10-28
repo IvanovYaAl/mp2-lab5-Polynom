@@ -7,11 +7,12 @@ using namespace std;
 int main()
 {
   string expression;
-  TPostfix postfix;
   double res;
-
+  string word;
   setlocale(LC_ALL, "Russian");
-
+  cout << "Введите арифметическое выражение: " << endl;
+  cin >> word;
+  TPostfix postfix(word);
   cout << "Арифметическое выражение: " << postfix.GetInfix() << endl;
   postfix.ToPostfix();
   cout << "Постфиксная форма: " << postfix.GetPostfix() << endl;
